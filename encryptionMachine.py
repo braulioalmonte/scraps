@@ -69,7 +69,9 @@ def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.LIGHT
 
     #controls
-    codesDropdown = ft.Dropdown(options=[ft.DropdownOption(text="Morse"),
+    codesDropdown = ft.Dropdown(hint_text="Choose a code",
+                                width=200, 
+                                options=[ft.DropdownOption(text="Morse"),
                                          ft.DropdownOption(text="A1Z26"),
                                          ft.DropdownOption(text="Polar Cenit"),
                                          ft.DropdownOption(text="Reverse")])
