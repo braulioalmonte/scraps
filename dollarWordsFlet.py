@@ -13,8 +13,10 @@ def main(page: ft.Page):
             wordSum+=lettersToNumbers[letter]
         if wordSum == 100:
             resultText.value = f"{userWord} is a dollar word!"
+            resultText.color = ft.Colors.GREEN
         else:
             resultText.value = f"{userWord} is not a dollar word, it is worth {wordSum} cents"
+            resultText.color = ft.Colors.RED
 
     #page setup
     page.theme_mode = ft.ThemeMode.LIGHT
@@ -24,7 +26,7 @@ def main(page: ft.Page):
     #controls
     #!i'll finish this later
     wordTextField = ft.TextField(hint_text="Write your word here: ", on_change=processWord)
-    resultText = ft.Text(value="")
+    resultText = ft.Text(value="", size=20)
 
     page.add(wordTextField, resultText)
 
