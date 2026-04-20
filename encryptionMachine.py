@@ -3,7 +3,7 @@ import flet as ft
 
 def main(page: ft.Page):
 
-    morse_dict = {
+    morseDict = {
     'A': '.-',
     'B': '-...',
     'C': '-.-.',
@@ -40,12 +40,14 @@ def main(page: ft.Page):
     '7': '--...',
     '8': '---..',
     '9': '----.',
-    ' ': '/'
+    ' ': ''
         }
     #functions
     def processMessage(e):
+        nonlocal morseDict
+        userMessage = messageTextField.value.upper()
 
-        pass
+        resultText.value = "".join(morseDict[letter]+"/" for letter in userMessage)
 
     #page setup
     page.theme_mode = ft.ThemeMode.LIGHT
