@@ -2,7 +2,7 @@
 import flet as ft
 
 def main(page: ft.Page):
-
+    #variables
     morseDict = {
     'A': '.-',
     'B': '-...',
@@ -42,20 +42,37 @@ def main(page: ft.Page):
     '9': '----.',
     ' ': ''
         }
+    polarCenitDict = {"P": "C",
+                      "O": "E",
+                      "L": "N",
+                      "A": "I",
+                      "R": "T"}
+    a1z26Dict = {"abcdefghijklmnopqrstuvwxyz"[i-1] : i for i in range(1,27)}
+
     #functions
     def processMessage(e):
-        nonlocal morseDict
-        userMessage = messageTextField.value.upper()
+        if codesDropdown.value == "Morse":
+            nonlocal morseDict
+            userMessage = messageTextField.value.upper()
 
-        resultText.value = "".join(morseDict[letter]+"/" for letter in userMessage)
+            resultText.value = "".join(morseDict[letter]+"/" for letter in userMessage)
+        elif codesDropdown.value == "A1Z26":
+            pass
+        
+        elif codesDropdown == "Polar Cenit":
+            pass
 
     #page setup
     page.theme_mode = ft.ThemeMode.LIGHT
 
     #controls
+    codesDropdown = ft.Dropdown(options=[ft.DropdownOption(text="Morse"),
+                                         ft.DropdownOption(text="A1Z26"),
+                                         ft.DropdownOption(text="Polar Cenit")])
+    
     messageTextField = ft.TextField(hint_text="", on_change=processMessage)
     resultText = ft.Text("")
 
-    page.add(messageTextField, resultText)
+    page.add(codesDropdown,messageTextField, resultText)
 
 ft.run(main=main)
