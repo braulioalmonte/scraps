@@ -59,8 +59,11 @@ def main(page: ft.Page):
         elif codesDropdown.value == "A1Z26":
             pass
         
-        elif codesDropdown == "Polar Cenit":
+        elif codesDropdown.value == "Polar Cenit":
             pass
+
+        elif codesDropdown.value == "Reverse":
+            resultText.value = messageTextField.value[::-1]
 
     #page setup
     page.theme_mode = ft.ThemeMode.LIGHT
@@ -68,7 +71,8 @@ def main(page: ft.Page):
     #controls
     codesDropdown = ft.Dropdown(options=[ft.DropdownOption(text="Morse"),
                                          ft.DropdownOption(text="A1Z26"),
-                                         ft.DropdownOption(text="Polar Cenit")])
+                                         ft.DropdownOption(text="Polar Cenit"),
+                                         ft.DropdownOption(text="Reverse")])
     
     messageTextField = ft.TextField(hint_text="", on_change=processMessage)
     resultText = ft.Text("")
