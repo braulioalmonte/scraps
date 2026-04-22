@@ -36,16 +36,20 @@ def main(page: ft.Page):
     async def focusTextField():
         await typeSpace.focus()
 
-    def gameSetup(e):
+    async def gameSetup(e):
         typeSpace.disabled = False
         startButton.disabled = True
-        focusTextField()
+        mistakes.data = 0
+        seenCount.data = 0
+        mistakes.value = f"Mistakes: {mistakes.data} / {len(actualWords)}"
+        seenCount.value = f"Words seen: {seenCount.data} / {len(actualWords)}"
+        await focusTextField()
         chooseNextWord()
 
     def chooseNextWord():
         word.value = actualWords[seenCount.data]
     
-    def checkWord(e):
+    async def checkWord(e):
         seenCount.data+=1
         if typeSpace.value == word.value:
             resultText.value = "Correct!"
@@ -65,7 +69,7 @@ def main(page: ft.Page):
             startButton.disabled = False
         else:
             chooseNextWord()
-            typeSpace.focus()
+            await focusTextField()
         accText.value = f"Accuracy: {100-((mistakes.data/len(actualWords))*100)}"
         typeSpace.value = ""
 
