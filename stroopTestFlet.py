@@ -34,14 +34,33 @@ def main(page: ft.Page):
     
     colorWords = ["Red", "Blue", "Cyan", "Purple", "Green", "Yellow", "Orange"]
     indexes = []
+    lives = 0
     #Functions
     def addSeconds():
         countDownText.seconds +=1
     
     def substractSeconds():
         countDownText.seconds-=5
+    
+    def substractLife():
+        nonlocal lives
+        lives+=1
+        if lives <= 2:
+            livesRow.controls[lives-1].icon = ft.Icons.HEART_BROKEN
+        else:
+            resetGame()
+
+    def resetGame():
+        stroopText.value = "Color"
+        stroopText.color = ft.Colors.WHITE
+        livesRow.controls = [ft.Icon(icon=ft.Icons.FAVORITE) for i in range(3)]
+        correctText.data = incorrectText.data = 0
+        correctText.value = f"Correct: {correctText.data}"
+        incorrectText.value = f"Incorrect: {incorrectText.data}"
+        startButton.disabled = False
 
     def checkAnswer(e: ft.KeyboardEvent):
+        nextColor()
         correct = indexes[0] == indexes[1]
         if (e.key == "Arrow Left" and correct) or (e.key == "Arrow Right" and not correct):
             feedbackText.value = "Correct!"
@@ -50,16 +69,15 @@ def main(page: ft.Page):
             addSeconds()
         else:
             incorrectText.data +=1
-            incorrectText.vaue = f"Incorrect: {incorrectText.data}"
+            incorrectText.value = f"Incorrect: {incorrectText.data}"
             feedbackText.value = "Incorrect!"
             substractSeconds()
-        
-        nextColor()
+            substractLife()
 
     def startGame(e):
         startButton.disabled = True
+        listener.focus()
         nextColor()
-        pass
 
     def nextColor():
         nonlocal indexes
@@ -82,10 +100,17 @@ def main(page: ft.Page):
     countDownText =  Countdown(120)
     startButton = ft.Button("Start Game", on_click=startGame)
 
-    timerRow = ft.Row(controls=[countDownText, feedbackText], alignment=ft.MainAxisAlignment.START)
+    timerRow = ft.Row(controls=[countDownText, feedbackText], alignment=ft.MainAxisAlignment.CENTER)
+    livesRow = ft.Row(controls=[ft.Icon(icon=ft.Icons.FAVORITE) for i in range(3)], alignment=ft.MainAxisAlignment.CENTER)
 
     instructionText = ft.Text(value="Left for correct\nRight for incorrect", size=20)
-    mainColumn = ft.Column(controls=[stroopText, startButton, instructionText], 
+    mainColumn = ft.Column(controls=[stroopText,
+                                     livesRow, 
+                                     ft.Row(controls=[correctText, 
+                                                      startButton, 
+                                                      incorrectText],
+                                            alignment=ft.MainAxisAlignment.CENTER), 
+                                     instructionText], 
                            alignment=ft.MainAxisAlignment.START, 
                            horizontal_alignment=ft.CrossAxisAlignment.CENTER)
 
