@@ -47,16 +47,14 @@ def main(page: ft.Page):
         lives+=1
         if lives <= 2:
             livesRow.controls[lives-1].icon = ft.Icons.HEART_BROKEN
+            livesRow.controls[lives-1].color = ft.Colors.RED
+            
         else:
-            resetGame()
+            gameOver()
 
-    def resetGame():
+    def gameOver():
         stroopText.value = "Color"
         stroopText.color = ft.Colors.WHITE
-        livesRow.controls = [ft.Icon(icon=ft.Icons.FAVORITE) for i in range(3)]
-        correctText.data = incorrectText.data = 0
-        correctText.value = f"Correct: {correctText.data}"
-        incorrectText.value = f"Incorrect: {incorrectText.data}"
         startButton.disabled = False
 
     def checkAnswer(e: ft.KeyboardEvent):
@@ -76,6 +74,10 @@ def main(page: ft.Page):
 
     def startGame(e):
         startButton.disabled = True
+        livesRow.controls = [ft.Icon(icon=ft.Icons.FAVORITE) for i in range(3)]
+        correctText.data = incorrectText.data = 0
+        correctText.value = f"Correct: {correctText.data}"
+        incorrectText.value = f"Incorrect: {incorrectText.data}"
         listener.focus()
         nextColor()
 

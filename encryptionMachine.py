@@ -1,4 +1,7 @@
 #Inspired by https://cryptii.com/
+#TODO: Decryption (general)
+#TODO: Add A1Z26 encryption
+#TODO: Add Polar Cenit encryption
 import flet as ft
 
 def main(page: ft.Page):
@@ -78,7 +81,9 @@ def main(page: ft.Page):
     
     messageTextField = ft.TextField(hint_text="", on_change=processMessage)
     resultText = ft.Text("")
+    encryptButton = ft.Text(content="Encrypt")
+    copyButton = ft.Button(content="Copy to clipboard")
 
-    page.add(codesDropdown,messageTextField, resultText)
+    page.add(codesDropdown,messageTextField, resultText, )
 
 ft.run(main=main)
