@@ -151,7 +151,7 @@ def main(page: ft.Page):
 
     #Controls
     listener = ft.KeyboardListener(content=ft.Text(),on_key_down=checkAnswer)
-    stroopText = ft.Text(value="Color", size=50, data=len(colors)-1)
+    stroopText = ft.Text(value="Color", size=50, data=len(combinations[0])-1)
     feedbackText = ft.Text(value="")
     correctText = ft.Text(value="Correct: 0", data = 0)
     incorrectText = ft.Text(value="Incorrect: 0", data = 0)
