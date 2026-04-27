@@ -78,8 +78,7 @@ def main(page: ft.Page):
         (ft.Colors.ORANGE, "Green"),
         (ft.Colors.ORANGE, "Yellow"),
     ]
-}
-    indexes = []
+        }
     lives = 0
     gameRunning = False
     color = ""
@@ -126,8 +125,7 @@ def main(page: ft.Page):
             gameOver()
 
     async def startGame(e):
-        nonlocal gameRunning
-        nonlocal lives
+        nonlocal gameRunning, lives
         await listener.focus()
         lives = 0
         gameRunning = True
