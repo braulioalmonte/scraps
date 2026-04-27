@@ -98,7 +98,9 @@ def main(page: ft.Page):
             livesRow.controls[lives-1].color = ft.Colors.RED
 
     def gameOver():
-        nonlocal gameRunning
+        nonlocal gameRunning, color, word
+        color = ""
+        word = ""
         gameRunning = False
         stroopText.value = "Color"
         stroopText.color = ft.Colors.WHITE
