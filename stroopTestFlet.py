@@ -35,49 +35,61 @@ def main(page: ft.Page):
     colorWords = ["Red", "Blue", "Cyan", "Purple", "Green", "Yellow", "Orange"]
     indexes = []
     lives = 0
+    gameRunning = False
+
     #Functions
     def addSeconds():
-        countDownText.seconds +=1
+        countDownText.seconds += 1
     
     def substractSeconds():
-        countDownText.seconds-=5
+        countDownText.seconds -= 5
     
     def substractLife():
         nonlocal lives
         lives+=1
-        if lives <= 2:
+        if lives <= 3:
             livesRow.controls[lives-1].icon = ft.Icons.HEART_BROKEN
             livesRow.controls[lives-1].color = ft.Colors.RED
-        else:
-            gameOver()
 
     def gameOver():
+        nonlocal gameRunning
+        gameRunning = False
         stroopText.value = "Color"
         stroopText.color = ft.Colors.WHITE
         startButton.disabled = False
 
-    def checkAnswer(e: ft.KeyboardEvent):
-        nextColor()
-        correct = indexes[0] == indexes[1]
-        if (e.key == "Arrow Left" and correct) or (e.key == "Arrow Right" and not correct):
-            feedbackText.value = "Correct!"
-            correctText.data+=1
-            correctText.value = f"Correct: {correctText.data}"
-            addSeconds()
-        else:
-            incorrectText.data +=1
-            incorrectText.value = f"Incorrect: {incorrectText.data}"
-            feedbackText.value = "Incorrect!"
-            substractSeconds()
-            substractLife()
+    def checkAnswer(e: ft.KeyDownEvent):
+        print(e.key)
+        nonlocal lives
+        if gameRunning and (e.key in ["A", "D"]):
+            correct = indexes[0] == indexes[1]
+            if (e.key == "A" and correct) or (e.key == "D" and not correct):
+                feedbackText.value = "Correct!"
+                correctText.data+=1
+                correctText.value = f"Correct: {correctText.data}"
+                addSeconds()
+            else:
+                incorrectText.data +=1
+                incorrectText.value = f"Incorrect: {incorrectText.data}"
+                feedbackText.value = "Incorrect!"
+                substractSeconds()
+                substractLife()
+        if lives < 3:
+            nextColor()
+        elif lives >= 3:
+            gameOver()
 
-    def startGame(e):
+    async def startGame(e):
+        nonlocal gameRunning
+        nonlocal lives
+        await listener.focus()
+        lives = 0
+        gameRunning = True
         startButton.disabled = True
         livesRow.controls = [ft.Icon(icon=ft.Icons.FAVORITE) for i in range(3)]
         correctText.data = incorrectText.data = 0
         correctText.value = f"Correct: {correctText.data}"
         incorrectText.value = f"Incorrect: {incorrectText.data}"
-        listener.focus()
         nextColor()
 
     def nextColor():
@@ -104,7 +116,7 @@ def main(page: ft.Page):
     timerRow = ft.Row(controls=[countDownText, feedbackText], alignment=ft.MainAxisAlignment.CENTER)
     livesRow = ft.Row(controls=[ft.Icon(icon=ft.Icons.FAVORITE) for i in range(3)], alignment=ft.MainAxisAlignment.CENTER)
 
-    instructionText = ft.Text(value="Left for correct\nRight for incorrect", size=20)
+    instructionText = ft.Text(value="Press Left for correct\nPress Right for incorrect", size=20)
     mainColumn = ft.Column(controls=[stroopText,
                                      livesRow, 
                                      ft.Row(controls=[correctText, 
@@ -117,4 +129,4 @@ def main(page: ft.Page):
 
     page.add(timerRow, mainColumn, listener)
 
-ft.run(main)
+ft.run(main=main)
