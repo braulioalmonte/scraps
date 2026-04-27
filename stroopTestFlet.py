@@ -24,19 +24,66 @@ class Countdown(ft.Text):
 
 def main(page: ft.Page):
     #Variables
-    colors = [ft.Colors.RED,
-              ft.Colors.BLUE,
-              ft.Colors.CYAN_ACCENT,
-              ft.Colors.PURPLE,
-              ft.Colors.GREEN,
-              ft.Colors.YELLOW,
-              ft.Colors.ORANGE]
-    
-    colorWords = ["Red", "Blue", "Cyan", "Purple", "Green", "Yellow", "Orange"]
+    combinations = {
+    0: [
+        (ft.Colors.RED, "Red"),
+        (ft.Colors.BLUE, "Blue"),
+        (ft.Colors.CYAN_ACCENT, "Cyan"),
+        (ft.Colors.PURPLE, "Purple"),
+        (ft.Colors.GREEN, "Green"),
+        (ft.Colors.YELLOW, "Yellow"),
+        (ft.Colors.ORANGE, "Orange"),
+    ],
+    1: [
+        (ft.Colors.RED, "Blue"),
+        (ft.Colors.RED, "Cyan"),
+        (ft.Colors.RED, "Purple"),
+        (ft.Colors.RED, "Green"),
+        (ft.Colors.RED, "Yellow"),
+        (ft.Colors.RED, "Orange"),
+        (ft.Colors.BLUE, "Red"),
+        (ft.Colors.BLUE, "Cyan"),
+        (ft.Colors.BLUE, "Purple"),
+        (ft.Colors.BLUE, "Green"),
+        (ft.Colors.BLUE, "Yellow"),
+        (ft.Colors.BLUE, "Orange"),
+        (ft.Colors.CYAN_ACCENT, "Red"),
+        (ft.Colors.CYAN_ACCENT, "Blue"),
+        (ft.Colors.CYAN_ACCENT, "Purple"),
+        (ft.Colors.CYAN_ACCENT, "Green"),
+        (ft.Colors.CYAN_ACCENT, "Yellow"),
+        (ft.Colors.CYAN_ACCENT, "Orange"),
+        (ft.Colors.PURPLE, "Red"),
+        (ft.Colors.PURPLE, "Blue"),
+        (ft.Colors.PURPLE, "Cyan"),
+        (ft.Colors.PURPLE, "Green"),
+        (ft.Colors.PURPLE, "Yellow"),
+        (ft.Colors.PURPLE, "Orange"),
+        (ft.Colors.GREEN, "Red"),
+        (ft.Colors.GREEN, "Blue"),
+        (ft.Colors.GREEN, "Cyan"),
+        (ft.Colors.GREEN, "Purple"),
+        (ft.Colors.GREEN, "Yellow"),
+        (ft.Colors.GREEN, "Orange"),
+        (ft.Colors.YELLOW, "Red"),
+        (ft.Colors.YELLOW, "Blue"),
+        (ft.Colors.YELLOW, "Cyan"),
+        (ft.Colors.YELLOW, "Purple"),
+        (ft.Colors.YELLOW, "Green"),
+        (ft.Colors.YELLOW, "Orange"),
+        (ft.Colors.ORANGE, "Red"),
+        (ft.Colors.ORANGE, "Blue"),
+        (ft.Colors.ORANGE, "Cyan"),
+        (ft.Colors.ORANGE, "Purple"),
+        (ft.Colors.ORANGE, "Green"),
+        (ft.Colors.ORANGE, "Yellow"),
+    ]
+}
     indexes = []
     lives = 0
     gameRunning = False
-
+    color = ""
+    word = ""
     #Functions
     def addSeconds():
         countDownText.seconds += 1
@@ -59,10 +106,9 @@ def main(page: ft.Page):
         startButton.disabled = False
 
     def checkAnswer(e: ft.KeyDownEvent):
-        print(e.key)
-        nonlocal lives
+        nonlocal lives, color, word
         if gameRunning and (e.key in ["A", "D"]):
-            correct = indexes[0] == indexes[1]
+            correct = color == word.lower() #lower here because color constants on flet are written in lowercase
             if (e.key == "A" and correct) or (e.key == "D" and not correct):
                 feedbackText.value = "Correct!"
                 correctText.data+=1
@@ -93,10 +139,10 @@ def main(page: ft.Page):
         nextColor()
 
     def nextColor():
-        nonlocal indexes
-        indexes = [random.randint(0,stroopText.data),random.randint(0,stroopText.data)]
-        stroopText.color = colors[indexes[0]]
-        stroopText.value = colorWords[indexes[1]]
+        nonlocal color, word
+        color, word = random.choice(random.choice(combinations))
+        stroopText.color = color
+        stroopText.value = word
 
     #Page Setup
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
