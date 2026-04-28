@@ -148,6 +148,7 @@ def main(page: ft.Page):
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.window.height = 500
     page.window.width = 500
+    page.title = "Stroop Test Minigame"
 
     #Controls
     listener = ft.KeyboardListener(content=ft.Text(),on_key_down=checkAnswer)
