@@ -142,12 +142,46 @@ def main(page: ft.Page):
 
     #Functions
 
+    async def viewHome(e):
+        await page.push_route("/")
+
+    async def viewPeriodicTable(e):
+        await page.push_route("/periodicTableView")
+
+    def routeChange():
+        print("Route change:", page.route)
+        page.views.clear()
+        page.views.append(homeView)
+
+        if page.route == "/periodicTableView":
+            page.views.append(periodicTableView)
+    
+    async def viewPop(e):
+        if e.view is not None:
+            print("View pop:", e.view)
+            page.views.remove(e.view)
+            top_view = page.views[-1]
+            await page.push_route(top_view.route)
+
     #Views
+    #Table would be a grid (or grid if accurate) 
+    #Main grid would be 18x9
+    #If divided by groups, thenm left group 3x7, right group, 15x7 and bottom group 14x2
+    
+    periodicTableView = ft.View(route="/periodicTableView",
+                                controls=[ft.Text("This is supposed to be a periodic table"),
+                                          ft.Button(content="Go to home", on_click=viewHome)])
+    
+    homeView = ft.View(route="/", controls=[ft.Text(value="This is the home view"),
+                                                    ft.Button(content="Go to table", on_click=viewPeriodicTable)])
 
     #Page Setup
+    page.on_route_change = routeChange
+    page.on_view_pop = viewPop
 
     #Controls
-
-    pass
+    
+    #Initialization
+    routeChange()
 
 ft.run(main=main)
