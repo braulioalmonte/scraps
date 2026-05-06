@@ -162,15 +162,46 @@ def main(page: ft.Page):
             page.views.remove(e.view)
             top_view = page.views[-1]
             await page.push_route(top_view.route)
-
+    
+    def generatePeriodicTable():
+        excludedNumbers = [i for i in range(2,18)] + [i for i in range(21, 31)] + [i for i in range(39, 49)] + [i for i in range(127,148)] + [162,163,164,165,180]
+        tableGrid = ft.GridView(controls=[], width=1700, runs_count=18, spacing=8)
+        i=1
+        skipped = 0
+        elementColor = ft.Colors.BLUE
+        while i <= 180:
+            if i not in excludedNumbers:
+                elementColor = ft.Colors.RED if i % 2 == 0 else ft.Colors.BLUE
+                tableGrid.controls.append(ft.Container(height=100,
+                                    width=100,
+                                    bgcolor=elementColor,
+                                    content=
+                                            ft.Column(alignment=ft.MainAxisAlignment.CENTER,
+                                                      horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                                      controls=[
+                                                ft.Row(controls=[ft.Text(periodicTable[i-skipped]["atomic_number"], size=10), 
+                                                                 ft.Text(periodicTable[i-skipped]["atomic_mass"], size=10)], 
+                                                       alignment=ft.MainAxisAlignment.SPACE_AROUND),
+                                                ft.Text(periodicTable[i-skipped]["symbol"], size=10),
+                                                ft.Text(periodicTable[i-skipped]["name"], size=10)])))
+            else:
+                tableGrid.controls.append(ft.Container(height=100, width=100, visible=True, bgcolor=ft.Colors.BLACK))
+                skipped+=1
+            i+=1
+        
+        return tableGrid
     #Views
     #Table would be a grid (or grid if accurate) 
     #Main grid would be 18x9
     #If divided by groups, thenm left group 3x7, right group, 15x7 and bottom group 14x2
-    
-    periodicTableView = ft.View(route="/periodicTableView",
+    #Grid is 180 spaces counting "blank" spaces to fill with invisible placeholders
+    #I mananaged to create it but lmao positions from beyond lathanum are wrong lmao
+    #Might as well add a new property on the dictionary for actual position rather than just using the atomic number for the generation
+    periodicTableGrid = generatePeriodicTable()
+    periodicTableView = ft.View(auto_scroll=True, route="/periodicTableView",
                                 controls=[ft.Text("This is supposed to be a periodic table"),
-                                          ft.Button(content="Go to home", on_click=viewHome)])
+                                          ft.Button(content="Go to home", on_click=viewHome),
+                                          periodicTableGrid])
     
     homeView = ft.View(route="/", controls=[ft.Text(value="This is the home view"),
                                                     ft.Button(content="Go to table", on_click=viewPeriodicTable)])
@@ -178,6 +209,11 @@ def main(page: ft.Page):
     #Page Setup
     page.on_route_change = routeChange
     page.on_view_pop = viewPop
+    page.scroll = ft.ScrollMode.AUTO
+    # page.on_resize = lambda e: print(page.window.height, page.window.width)
+    page.window.resizable = False
+    page.window.height = 947
+    page.window.width = 1534
 
     #Controls
     
